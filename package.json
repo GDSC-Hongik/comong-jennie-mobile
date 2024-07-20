@@ -1,0 +1,24 @@
+{
+  "name": "comong",
+  "version": "1.0.0",
+  "description": "Your project description",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "android": "npx react-native run-android"
+  },
+  "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.6.1",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/stack": "^6.4.1"
+  },
+  "devDependencies": {
+    
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

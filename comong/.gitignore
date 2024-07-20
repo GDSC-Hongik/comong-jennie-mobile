@@ -1,0 +1,26 @@
+# React Native
+node_modules/
+.buckconfig
+.buckd/
+.docs/
+.gradle/
+.idea/
+.packages/
+.vscode/
+build/
+ios/Pods/
+*.pbxproj
+xcuserdata/
+*.xcworkspace
+android/.gradle/
+android/app/build/
+android/app/src/debug/
+android/app/src/androidTest/
+android/app/src/main/jniLibs/
+android/local.properties
+
+# Others
+.DS_Store
+.env
+
+node_modules/

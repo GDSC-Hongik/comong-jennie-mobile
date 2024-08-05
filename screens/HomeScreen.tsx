@@ -1,19 +1,23 @@
-// HomeScreen.tsx
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../types/navigation';
 
+type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
-const HomeScreen = () => {
-  const navigation = useNavigation();
+interface Props {
+  navigation: HomeScreenNavigationProp;
+}
 
+const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const goToClassScreen = () => {
-    navigation.navigate('ClassScreen');
+    navigation.navigate('Class');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Home Screen!</Text>
+      <Text style={styles.text}>Home Screen</Text>
       <Button title="Go to Class Screen" onPress={goToClassScreen} />
     </View>
   );
@@ -25,9 +29,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
+  text: {
+    fontSize: 20,
   },
 });
 

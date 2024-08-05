@@ -1,7 +1,7 @@
 // POST 요청을 보내는 함수
 const url1 = 'https://comong-jennie-server.onrender.com/main/major/'; // 요청을 보낼 URL
 const data1 = 3; // 서버로 보낼 데이터
-const data2= "al";
+const data2= "알고리즘분석";
 
 const postRequest = async (url, data) => {
 
@@ -38,4 +38,3 @@ const postRequest = async (url, data) => {
   postRequest(url1, data1);
   const url2 = `${url1}${data1}`;
   postRequest(url2, data2);
-  

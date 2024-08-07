@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-const ClassScreen = () => {
+const ClassScreen = () => { //학년 선택 파트
   const [selectedGrade, setSelectedGrade] = useState<string>('1');
 
   const handleGradeChange = (itemValue: string) => {
@@ -43,10 +43,10 @@ const ClassScreen = () => {
         style={styles.picker}
         onValueChange={handleGradeChange}
       >
-        <Picker.Item label="Grade 1" value="1" />
-        <Picker.Item label="Grade 2" value="2" />
-        <Picker.Item label="Grade 3" value="3" />
-        <Picker.Item label="Grade 4" value="4" />
+        <Picker.Item label="1학년" value="1" />
+        <Picker.Item label="2학년" value="2" />
+        <Picker.Item label="3학년" value="3" />
+        <Picker.Item label="4학년" value="4" />
       </Picker>
       <Button title="Submit" onPress={handleSubmit} />
     </View>

@@ -11,14 +11,14 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const goToClassScreen = () => {
-    navigation.navigate('Class');
+  const goToMajorSelectScreen = () => {
+    navigation.navigate('MajorSelect');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home Screen</Text>
-      <Button title="Go to Class Screen" onPress={goToClassScreen} />
+      <Button title="Go to Major Select Screen" onPress={goToMajorSelectScreen} />
     </View>
   );
 };
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
+    marginBottom: 20,
   },
 });
 

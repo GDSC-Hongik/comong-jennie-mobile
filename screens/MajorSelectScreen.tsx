@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../App'; 
+import { RootStackParamList } from '../types/navigation';
 import axios from 'axios';
 
 type MajorSelectScreenNavigationProp = StackNavigationProp<

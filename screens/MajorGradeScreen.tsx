@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
+import { RootStackParamList } from '../types/navigation';  // RootStackParamList를 가져옵니다.
+
+type MajorScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Major'>;
 
 const MajorGradeScreen: React.FC = () => {
   const route = useRoute();
+  const navigation = useNavigation<MajorScreenNavigationProp>();
   const { grade } = route.params as { grade: number };
   const [info, setInfo] = useState<any[]>([]);
 
@@ -21,17 +26,28 @@ const MajorGradeScreen: React.FC = () => {
     fetchGradeInfo();
   }, [grade]);
 
+  const handlePostPress = (sub: string, profs: string, postId: number) => {
+    navigation.navigate('Major', { grade, sub, profs, postId });
+  };
+
   return (
-    <View>
-      <Text>{`Grade ${grade} Information`}</Text>
-      {info.map((item, index) => (
-        <View key={index}>
-          <Text>{item.title}</Text>
-          <Text>{item.content}</Text>
-          <Text>{item.time}</Text>
-        </View>
-      ))}
-    </View>
+    <ScrollView>
+      <View>
+        {info.length > 0 ? (
+          info.map((post) => (
+            <TouchableOpacity key={post.id} onPress={() => handlePostPress(post.sub, post.profs, post.id)}>
+              <View style={{ marginVertical: 10 }}>
+                <Text style={{ fontWeight: 'bold' }}>{post.title}</Text>
+                <Text>{post.content}</Text>
+                <Text>{new Date(post.dt_created).toLocaleDateString()}</Text>
+              </View>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text>게시글이 없습니다.</Text>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

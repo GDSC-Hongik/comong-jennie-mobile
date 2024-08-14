@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
-import { RouteProp, useRoute } from '@react-navigation/native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
-import { RootStackParamList } from '../App';
+import { RootStackParamList } from '../types/navigation';
 
 type MajorSubScreenRouteProp = RouteProp<RootStackParamList, 'MajorSub'>;
+type MajorScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Major'>;
 
 const MajorSubScreen: React.FC = () => {
   const route = useRoute<MajorSubScreenRouteProp>();
+  const navigation = useNavigation<MajorScreenNavigationProp>(); // useNavigation에 타입 지정
   const { grade, subject } = route.params;
 
   const [posts, setPosts] = useState<any[]>([]);
@@ -30,16 +33,22 @@ const MajorSubScreen: React.FC = () => {
     fetchSubjectPosts();
   }, [grade, subject]);
 
+  const handlePostPress = (profs: string, postId: number) => {
+    navigation.navigate('Major', { grade, sub: subject, profs, postId });
+  };
+
   return (
     <ScrollView>
       <View>
         {posts.length > 0 ? (
           posts.map((post) => (
-            <View key={post.id} style={{ marginVertical: 10 }}>
-              <Text style={{ fontWeight: 'bold' }}>{post.title}</Text>
-              <Text>{post.content}</Text>
-              <Text>{new Date(post.dt_created).toLocaleDateString()}</Text>
-            </View>
+            <TouchableOpacity key={post.id} onPress={() => handlePostPress(post.profs, post.id)}>
+              <View style={{ marginVertical: 10 }}>
+                <Text style={{ fontWeight: 'bold' }}>{post.title}</Text>
+                <Text>{post.content}</Text>
+                <Text>{new Date(post.dt_created).toLocaleDateString()}</Text>
+              </View>
+            </TouchableOpacity>
           ))
         ) : (
           <Text>게시글이 없습니다.</Text>

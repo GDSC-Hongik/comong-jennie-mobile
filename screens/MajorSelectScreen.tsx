@@ -40,11 +40,11 @@ const subMap: { [key: string]: string } = {
   "정보보안": "IS",
   "컴퓨터그래픽스와메타버스": "CG&M",
   "기계학습심화": "AML",
-  "임베디드시스템및실험": "ES&L"
+  "임베디드시스템및실험": "ES&L",
 };
 
 const profMap: { [key: string]: string } = {
-  "배성일": "PaeS",
+ "배성일": "PaeS",
   "송하윤": "SongH",
   "이혜영1": "LeeHY1",
   "Leonard Mcmillan": "LeonardM",
@@ -69,27 +69,24 @@ const profMap: { [key: string]: string } = {
   "김선일": "KimSI",
   "윤영": "YoonY",
   "김경창": "KimKC",
-  "김일도": "KimID"
+  "김일도": "KimID",
 };
 
 const MajorSelectScreen: React.FC = () => {
   const navigation = useNavigation<MajorSelectScreenNavigationProp>();
 
-  const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const [subjects, setSubjects] = useState<string[]>([]); 
-  const [professors, setProfessors] = useState<string[]>([]);
+  // 학년, 과목, 교수 상태를 독립적으로 관리하는 객체
+  const [openStates, setOpenStates] = useState<{ [key: number]: boolean }>({});
+  const [subjectsMap, setSubjectsMap] = useState<{ [key: number]: string[] }>({});
+  const [professorsMap, setProfessorsMap] = useState<{ [key: number]: { [subject: string]: string[] } }>({});
 
   const handleGradeToggle = async (grade: number) => {
-    if (selectedGrade === grade) {
-      setSelectedGrade(null);
-      setSubjects([]); 
-      setSelectedSubject(null);
-      setProfessors([]);
-    } else {
-      setSelectedGrade(grade);
-      setSelectedSubject(null);
-      setProfessors([]);
+    setOpenStates((prevState) => ({
+      ...prevState,
+      [grade]: !prevState[grade], // 클릭한 학년의 상태만 변경
+    }));
+
+    if (!openStates[grade] && !subjectsMap[grade]) {
       await fetchSubjectsForGrade(grade);
     }
   };
@@ -97,29 +94,26 @@ const MajorSelectScreen: React.FC = () => {
   const fetchSubjectsForGrade = async (grade: number) => {
     try {
       const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/`);
-
       const uniqueSubjects: string[] = Array.from(new Set(response.data.map((item: any) => {
         const subjectKey = Object.keys(subMap).find(key => subMap[key] === item.sub);
         return subjectKey || item.sub;
       })));
-      setSubjects(uniqueSubjects);
-      
+      setSubjectsMap((prevState) => ({
+        ...prevState,
+        [grade]: uniqueSubjects,
+      }));
     } catch (error: any) {  
-      if (error.response && error.response.status === 404) {
-        setSubjects([]); 
-      } else {
-        setSubjects([]); 
-      }
+      setSubjectsMap((prevState) => ({
+        ...prevState,
+        [grade]: [],
+      }));
     }
   };
 
-  const handleSubjectToggle = async (subject: string) => {
-    if (selectedSubject === subject) {
-      setSelectedSubject(null);
-      setProfessors([]);
-    } else {
-      setSelectedSubject(subject);
-      await fetchProfessorsForSubject(selectedGrade!, subject);
+  const handleSubjectToggle = async (grade: number, subject: string) => {
+    const mappedSubject = subMap[subject];
+    if (mappedSubject && (!professorsMap[grade] || !professorsMap[grade][mappedSubject])) {
+      await fetchProfessorsForSubject(grade, subject);
     }
   };
 
@@ -128,17 +122,26 @@ const MajorSelectScreen: React.FC = () => {
     if (mappedSubject) {
       try {
         const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/${mappedSubject}/`);
-        
         const uniqueProfessors: string[] = Array.from(new Set(response.data.map((item: any) => {
           const professorKey = Object.keys(profMap).find(key => profMap[key] === item.profs);
           return professorKey || item.profs;
         })));
-        setProfessors(uniqueProfessors);
+        setProfessorsMap((prevState) => ({
+          ...prevState,
+          [grade]: {
+            ...(prevState[grade] || {}),
+            [mappedSubject]: uniqueProfessors,
+          },
+        }));
       } catch (error: any) {  
-        setProfessors([]); 
+        setProfessorsMap((prevState) => ({
+          ...prevState,
+          [grade]: {
+            ...(prevState[grade] || {}),
+            [mappedSubject]: [],
+          },
+        }));
       }
-    } else {
-      console.error(`Subject mapping for ${subject} not found.`);
     }
   };
 
@@ -155,10 +158,11 @@ const MajorSelectScreen: React.FC = () => {
     }
   };
 
-  const handleProfessorClick = (professor: string) => {
+  const handleProfessorClick = (grade: number, subject: string, professor: string) => {
     const mappedProfessor = profMap[professor];
-    if (selectedGrade !== null && selectedSubject && mappedProfessor) {
-      navigation.navigate('MajorProf', { grade: selectedGrade, subject: subMap[selectedSubject], professor: mappedProfessor });
+    const mappedSubject = subMap[subject];
+    if (mappedProfessor && mappedSubject) {
+      navigation.navigate('MajorProf', { grade, subject: mappedSubject, professor: mappedProfessor });
     } else {
       console.error(`Professor mapping for ${professor} not found.`);
     }
@@ -176,22 +180,22 @@ const MajorSelectScreen: React.FC = () => {
               <Text>{grade}학년 정보 보기</Text>
             </TouchableOpacity>
           </View>
-          {selectedGrade === grade && subjects.length > 0 && subjects.map((subject) => (
+          {openStates[grade] && subjectsMap[grade]?.length > 0 && subjectsMap[grade].map((subject) => (
             <View key={subject}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => handleSubjectToggle(subject)}>
+                <TouchableOpacity onPress={() => handleSubjectToggle(grade, subject)}>
                   <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleSubjectClick(grade, subject)}>
                   <Text>{subject} 정보 보기</Text>
                 </TouchableOpacity>
               </View>
-              {selectedSubject === subject && professors.map((professor) => (
+              {professorsMap[grade]?.[subMap[subject]]?.map((professor) => (
                 <View key={professor} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <TouchableOpacity>
                     <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleProfessorClick(professor)}>
+                  <TouchableOpacity onPress={() => handleProfessorClick(grade, subject, professor)}>
                     <Text>{professor} 정보 보기</Text>
                   </TouchableOpacity>
                 </View>

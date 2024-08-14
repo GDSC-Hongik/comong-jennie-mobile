@@ -17,13 +17,12 @@ export type RootStackParamList = {
   MajorGrade: { grade: number };
   MajorSub: { grade: number; subject: string };
   MajorProf: { grade: number; subject: string; professor: string };
-  Major: { grade: number; subject: string; professor: string; postId: number };
-  MajorPost: { grade: number; subject: string; professor: string };
+  MajorPost: { grade: number; sub: string; profs: string; postId?: number };
+  Major: { grade: number; sub: string; profs: string; postId: number };
 };
 
 // 네비게이션 속성 정의 (필요에 따라 추가)
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export type ClassScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Class'>;
-export type NotificationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Notification'>;
 export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
 export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;

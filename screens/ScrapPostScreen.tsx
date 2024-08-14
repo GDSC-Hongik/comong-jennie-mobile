@@ -1,0 +1,1 @@
+//ScrapPostScreen.tsx 스크랩 한 게시글 보기

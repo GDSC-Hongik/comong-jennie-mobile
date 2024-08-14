@@ -1,0 +1,1 @@
+export { default as Comong } from './assets/icon-comong.svg';

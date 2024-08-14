@@ -1,0 +1,1 @@
+//LikePostScreen.tsx 좋아요 한 게시글 보기

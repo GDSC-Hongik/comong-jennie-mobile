@@ -1,10 +1,13 @@
-//HomeScreen.tsx
+//아이콘 추가 안 됨 이슈 해결해야 됨
+
+//HomeScreen.tsx 메인 화면
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
-import { Icon } from '../src/index';
+import { ImageComponent } from 'react-native';
+import { inlineStyles } from 'react-native-svg';
+
 
 type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -13,9 +16,6 @@ interface Props {
 }
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
-  const goToClassScreen = () => {
-    navigation.navigate('Class');
-  };
 
   const goToSignUpScreen = () => {
     navigation.navigate('SignUp');
@@ -25,13 +25,14 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     navigation.navigate('LogIn');
   };
 
+
   return (
     <View style={styles.container}>
-      {/*<Icon style={styles.icon} />*/}
-      <Text style={styles.text}>Home Screen</Text>
-      <Button title="Go to Class Screen" onPress={goToClassScreen} />
-      <Button title="Go to Sign Up Screen" onPress={goToSignUpScreen} />
-      <Button title="Go to Log In Screen" onPress={goToLogInScreen} />
+      <View style={styles.topbar}>
+        <Text style={styles.text}>Home Screen</Text>
+        <Button title="Go to Sign Up Screen" onPress={goToSignUpScreen} />
+        <Button title="Go to Log In Screen" onPress={goToLogInScreen} />
+      </View>
     </View>
   );
 };
@@ -39,17 +40,25 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    //alignItems: 'center',
+  },
+  topbar: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 40,
+    flexDirection: 'row',
   },
   text: {
     fontSize: 20,
-
-    
   },
   icon: {
     width: 40,
   },
+  comong : {
+    width: 40,
+  }
 });
 
 export default HomeScreen;

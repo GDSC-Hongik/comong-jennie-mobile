@@ -6,10 +6,27 @@ export type RootStackParamList = {
   Class: undefined;
   SignUp: undefined;
   LogIn: undefined;
+  Notification: undefined;
+  Search: { serverUrl: string };
+  Profile: undefined;
+  Loading: undefined;
+  Resume: undefined;
+  ResumeEdit: undefined;
+  LikePost: undefined;
+  ScrapPost: undefined;
+  PasswordEdit: undefined;
 };
 
 // 네비게이션 속성 정의
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
 export type ClassScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Class'>;
 export type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
-export type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LogIn'>;
+export type LogInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LogIn'>;
+export type NotificationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Notification'>;
+export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
+export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
+export type LoadingScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Loading'>;
+export type LikePostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LikePost'>;
+export type ScrapPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'ScrapPost'>;
+export type PasswordEditScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'PasswordEdit'>;
+

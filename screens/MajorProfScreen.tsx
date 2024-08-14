@@ -1,37 +1,51 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { View, Text, ScrollView } from 'react-native';
+import { RouteProp, useRoute } from '@react-navigation/native';
 import axios from 'axios';
+import { RootStackParamList } from '../App';
+
+type MajorProfScreenRouteProp = RouteProp<RootStackParamList, 'MajorProf'>;
 
 const MajorProfScreen: React.FC = () => {
-  const route = useRoute();
-  const { grade, subject, professor } = route.params as { grade: number, subject: string, professor: string };
-  const [info, setInfo] = useState<any[]>([]);
+  const route = useRoute<MajorProfScreenRouteProp>();
+  const { grade, subject, professor } = route.params;
+
+  const [posts, setPosts] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchProfInfo = async () => {
+    const fetchProfessorPosts = async () => {
       try {
         const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/${subject}/${professor}/`);
-        setInfo(response.data);
+
+        if (response.status === 200 && Array.isArray(response.data)) {
+          setPosts(response.data);
+        } else {
+          console.error('Unexpected response format');
+        }
       } catch (error) {
-        console.error('Failed to fetch professor info', error);
+        console.error('Failed to fetch professor posts', error);
       }
     };
 
-    fetchProfInfo();
+    fetchProfessorPosts();
   }, [grade, subject, professor]);
 
   return (
-    <View>
-      <Text>{`Professor ${professor} Information in ${subject}`}</Text>
-      {info.map((item, index) => (
-        <View key={index}>
-          <Text>{item.title}</Text>
-          <Text>{item.content}</Text>
-          <Text>{item.time}</Text>
-        </View>
-      ))}
-    </View>
+    <ScrollView>
+      <View>
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <View key={post.id} style={{ marginVertical: 10 }}>
+              <Text style={{ fontWeight: 'bold' }}>{post.title}</Text>
+              <Text>{post.content}</Text>
+              <Text>{new Date(post.dt_created).toLocaleDateString()}</Text>
+            </View>
+          ))
+        ) : (
+          <Text>게시글이 없습니다.</Text>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

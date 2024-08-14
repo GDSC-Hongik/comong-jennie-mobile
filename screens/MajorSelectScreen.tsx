@@ -1,57 +1,65 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../App'; 
+import axios from 'axios';
+
+type MajorSelectScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'MajorSelect'
+>;
 
 const subMap: { [key: string]: string } = {
-  "자료구조및프로그래밍": "DSandProg",
-  "논리회로설계및실험": "LCandExp",
-  "인터넷프로그래밍": "IntProg",
-  "HCI윈도우즈프로그래밍": "HCIWinProg",
-  "알고리즘분석": "AlgoAnal",
-  "컴퓨터구조": "CompArch",
-  "프로그래밍언어론": "PLang",
-  "컴퓨터네트워크": "CompNet",
+  "자료구조및프로그래밍": "DS&P",
+  "논리회로설계및실험": "LC&L",
+  "인터넷프로그래밍": "IP",
+  "HCI윈도우즈프로그래밍": "HCIWP",
+  "알고리즘분석": "AA",
+  "컴퓨터구조": "CA",
+  "프로그래밍언어론": "PLT",
+  "컴퓨터네트워크": "CN",
   "비디오이미지프로세싱": "VIP",
-  "AIML응용프로젝트1": "AIMLProj1",
-  "창직종합설계프로젝트1": "InnovDesProj1",
-  "창직종합설계프로젝트2": "InnovDesProj2",
-  "AIML응용프로젝트2": "AIMLProj2",
-  "블록체인": "Blockchain",
+  "AIML응용프로젝트1": "AIMLAP1",
+  "창직종합설계프로젝트1": "P1",
+  "창직종합설계프로젝트2": "P2",
+  "AIML응용프로젝트2": "AIMLAP2",
+  "블록체인": "BC",
   "딥러닝자연어처리": "DLNLP",
   "운영체제": "OS",
-  "오토마타": "Automata",
-  "기초데이터베이스": "BasicDB",
-  "디지털시스템설계": "DigSysDes",
-  "문제해결기법": "ProblemSolv",
-  "기계학습기초": "MLBasics",
-  "어셈블리언어및실습": "AssemblyLang",
-  "데이터통신": "DataComm",
-  "멀티미디어응용수학": "MMAppMath",
-  "소프트웨어공학": "SoftEng",
-  "응용데이터베이스": "AppliedDB",
-  "정보보안": "InfoSec",
-  "컴퓨터그래픽스와메타버스": "CGandMetaverse",
-  "기계학습심화": "MLAdv",
-  "임베디드시스템및실험": "EmbeddedSys",
+  "오토마타": "AT",
+  "기초데이터베이스": "IDB",
+  "디지털시스템설계": "DSD",
+  "문제해결기법": "PST",
+  "기계학습기초": "FML",
+  "어셈블리언어및실습": "ALP",
+  "데이터통신": "DC",
+  "멀티미디어응용수학": "AMM",
+  "소프트웨어공학": "SE",
+  "응용데이터베이스": "DCA",
+  "정보보안": "IS",
+  "컴퓨터그래픽스와메타버스": "CG&M",
+  "기계학습심화": "AML",
+  "임베디드시스템및실험": "ES&L"
 };
 
 const profMap: { [key: string]: string } = {
-  "배성일": "Pae",
-  "송하윤": "Song",
-  "이혜영1": "LeeH1",
-  "Leonard Mcmillan": "McMillan",
+  "배성일": "PaeS",
+  "송하윤": "SongH",
+  "이혜영1": "LeeHY1",
+  "Leonard Mcmillan": "LeonardM",
   "이기철": "LeeK",
   "이준용": "LeeJY",
   "김상곤": "KimSG",
   "김한규": "KimHG",
   "김영호": "KimYH",
-  "최윤화": "Choi",
+  "최윤화": "ChoiYH",
   "이장호": "LeeJH",
   "박재영2": "ParkJY2",
-  "하란": "Ha",
-  "권건우": "Kwon",
+  "하란": "HaR",
+  "권건우": "KwonKW",
   "박필원": "ParkPW",
-  "표창우": "Pyo",
+  "표창우": "PyoCW",
   "박준철": "ParkJC",
   "박준상1": "ParkJS1",
   "김태형3": "KimTH3",
@@ -59,41 +67,78 @@ const profMap: { [key: string]: string } = {
   "이윤규": "LeeYG",
   "박지헌": "ParkJH",
   "김선일": "KimSI",
-  "윤영": "Yoon",
-  "김경창": "KimGC",
-  "김일도": "KimID",
+  "윤영": "YoonY",
+  "김경창": "KimKC",
+  "김일도": "KimID"
 };
 
 const MajorSelectScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<MajorSelectScreenNavigationProp>();
 
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const [subjects, setSubjects] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>([]); 
   const [professors, setProfessors] = useState<string[]>([]);
 
-  const handleGradeToggle = (grade: number) => {
+  const handleGradeToggle = async (grade: number) => {
     if (selectedGrade === grade) {
       setSelectedGrade(null);
-      setSubjects([]);
+      setSubjects([]); 
       setSelectedSubject(null);
       setProfessors([]);
     } else {
       setSelectedGrade(grade);
       setSelectedSubject(null);
       setProfessors([]);
-      // 실제 데이터 로딩은 텍스트 클릭에서 처리
+      await fetchSubjectsForGrade(grade);
     }
   };
 
-  const handleSubjectToggle = (subject: string) => {
+  const fetchSubjectsForGrade = async (grade: number) => {
+    try {
+      const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/`);
+
+      const uniqueSubjects: string[] = Array.from(new Set(response.data.map((item: any) => {
+        const subjectKey = Object.keys(subMap).find(key => subMap[key] === item.sub);
+        return subjectKey || item.sub;
+      })));
+      setSubjects(uniqueSubjects);
+      
+    } catch (error: any) {  
+      if (error.response && error.response.status === 404) {
+        setSubjects([]); 
+      } else {
+        setSubjects([]); 
+      }
+    }
+  };
+
+  const handleSubjectToggle = async (subject: string) => {
     if (selectedSubject === subject) {
       setSelectedSubject(null);
       setProfessors([]);
     } else {
       setSelectedSubject(subject);
-      setProfessors([]);
-      // 실제 데이터 로딩은 텍스트 클릭에서 처리
+      await fetchProfessorsForSubject(selectedGrade!, subject);
+    }
+  };
+
+  const fetchProfessorsForSubject = async (grade: number, subject: string) => {
+    const mappedSubject = subMap[subject];
+    if (mappedSubject) {
+      try {
+        const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/${mappedSubject}/`);
+        
+        const uniqueProfessors: string[] = Array.from(new Set(response.data.map((item: any) => {
+          const professorKey = Object.keys(profMap).find(key => profMap[key] === item.profs);
+          return professorKey || item.profs;
+        })));
+        setProfessors(uniqueProfessors);
+      } catch (error: any) {  
+        setProfessors([]); 
+      }
+    } else {
+      console.error(`Subject mapping for ${subject} not found.`);
     }
   };
 
@@ -102,36 +147,40 @@ const MajorSelectScreen: React.FC = () => {
   };
 
   const handleSubjectClick = (grade: number, subject: string) => {
-    navigation.navigate('MajorSub', { grade, subject: subMap[subject] });
+    const mappedSubject = subMap[subject];
+    if (mappedSubject) {
+      navigation.navigate('MajorSub', { grade, subject: mappedSubject });
+    } else {
+      console.error(`Subject mapping for ${subject} not found.`);
+    }
   };
 
   const handleProfessorClick = (professor: string) => {
-    if (selectedGrade !== null && selectedSubject) {
-      navigation.navigate('Major', {
-        grade: selectedGrade,
-        subject: subMap[selectedSubject],
-        professor: profMap[professor],
-      });
+    const mappedProfessor = profMap[professor];
+    if (selectedGrade !== null && selectedSubject && mappedProfessor) {
+      navigation.navigate('MajorProf', { grade: selectedGrade, subject: subMap[selectedSubject], professor: mappedProfessor });
+    } else {
+      console.error(`Professor mapping for ${professor} not found.`);
     }
   };
 
   return (
     <View>
-      {[1, 2, 3, 4].map((grade) => (
+      {[2, 3, 4].map((grade) => (
         <View key={grade}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity onPress={() => handleGradeToggle(grade)}>
-              <Image source={require('./assets/folder.png')} style={{ width: 24, height: 24 }} />
+              <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => handleGradeClick(grade)}>
-              <Text>Grade {grade} 정보 보기</Text>
+              <Text>{grade}학년 정보 보기</Text>
             </TouchableOpacity>
           </View>
-          {selectedGrade === grade && subjects.map((subject) => (
+          {selectedGrade === grade && subjects.length > 0 && subjects.map((subject) => (
             <View key={subject}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => handleSubjectToggle(subject)}>
-                  <Image source={require('./assets/folder.png')} style={{ width: 24, height: 24 }} />
+                  <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => handleSubjectClick(grade, subject)}>
                   <Text>{subject} 정보 보기</Text>
@@ -140,7 +189,7 @@ const MajorSelectScreen: React.FC = () => {
               {selectedSubject === subject && professors.map((professor) => (
                 <View key={professor} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <TouchableOpacity>
-                    <Image source={require('./assets/folder.png')} style={{ width: 24, height: 24 }} />
+                    <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => handleProfessorClick(professor)}>
                     <Text>{professor} 정보 보기</Text>

@@ -1,1 +1,12 @@
-//각 글 id누른 거 보여주는 창
+import React from 'react';
+import { View, Text } from 'react-native';
+
+const MajorScreen: React.FC = () => {
+  return (
+    <View>
+      <Text>Major Screen</Text>
+    </View>
+  );
+};
+
+export default MajorScreen;

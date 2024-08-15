@@ -2,15 +2,35 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, ScrollView, Image, Alert, Button } from 'react-native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  participants_num: number;
+  current_num: number;
+}
+
+interface Comment {
+  id: number;
+  user: string;
+  resume_id: string;
+}
+
+interface Resume {
+  project: string;
+  contest: string;
+  etc: string;
+  link: string;
+  skill: string;
+  appeal: string;
+}
+
 interface RecruitScreenProps {
-  route: {
-    params: {
-      postId: number;
-    };
-  };
   navigation: NativeStackNavigationProp<RootStackParamList, 'Recruit'>;
+  route: RouteProp<RootStackParamList, 'Recruit'>;
 }
 
 const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {

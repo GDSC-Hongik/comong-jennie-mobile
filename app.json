@@ -4,7 +4,7 @@
     "slug": "comong",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-cm.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,13 +15,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jennie.comong",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon-cm.png"
     },
     "extra": {
       "eas": {

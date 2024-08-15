@@ -39,15 +39,9 @@ const LogInScreen: React.FC<Props> = ({ navigation }) => {
       }
 
       const responseData = await response.json();
-      // for (const key in responseData) {
-      //   if (responseData.hasOwnProperty(key)) {
-      //     console.log(`${key}: ${responseData[key]}`);
-      //   }
-      // }
-      console.log(responseData);
+
       const token = responseData.user.user.token;
-      //const { token } = responseData.user;
-      console.log(token);
+
 
       
       // const { accessToken, refreshToken } = responseData;

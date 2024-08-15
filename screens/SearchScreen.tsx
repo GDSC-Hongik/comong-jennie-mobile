@@ -49,14 +49,14 @@ const SearchScreen: React.FC = ({ }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Search for Posts</Text>
+      <Text style={styles.label}>게시글 검색</Text>
       <TextInput
         style={styles.input}
         placeholder="제목, 내용, 작성자, #태그"
         value={kind}
         onChangeText={setKind}
       />
-      <Button title="Search" onPress={handleSearch} />
+      <Button title="검색하기" onPress={handleSearch} />
 
       <FlatList
         data={results}

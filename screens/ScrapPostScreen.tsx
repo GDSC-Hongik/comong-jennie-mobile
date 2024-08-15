@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, Pressable } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList, NotificationScreenNavigationProp } from '../types/navigation';
-import NotificationBox2 from '../src/components/NotificationBox2';
+import NotificationBox3 from '../src/components/NotificationBox3';
 import TitleComponent from '../src/components/TitleComponent';
 
 interface Props {
@@ -17,8 +17,9 @@ const ScrapPostScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.container}>
         <TitleComponent title={'스크랩 한 게시글'} >
         </TitleComponent>
-        <NotificationBox2 title={'컴퓨터네트워크(박준철) 새 글 알림'} detail={'과제 2번 풀이 비교해 볼 사람...'}></NotificationBox2>
-        <NotificationBox2 title={'알고리즘분석(하란) 새 글 알림'} detail={'이거 설마 진짜 손으로 다 써야 됨?'}></NotificationBox2>
+        <NotificationBox3 title={'컴퓨터네트워크(박준철)'} detail={'과제 2번 풀이 비교해 볼 사람...'}></NotificationBox3>
+        <NotificationBox3 title={'알고리즘분석(하란)'} detail={'란골 과제 문제 번호'}></NotificationBox3>
+        <NotificationBox3 title={'알고리즘분석(하란)'} detail={'24년 1학기 족보'}></NotificationBox3>
       </View>
     );
     

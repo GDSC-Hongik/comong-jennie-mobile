@@ -1,10 +1,10 @@
 //PasswordEditScreen.tsx 비밀번호 변경 화면
 //오류 있음 수정해야 함 ㅠㅠ
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, Pressable } from 'react-native';
 import { PasswordEditScreenNavigationProp } from '../types/navigation';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TitleComponent from '../src/components/TitleComponent';
 
 interface Props {
   navigation: PasswordEditScreenNavigationProp;
@@ -53,6 +53,7 @@ const PasswordEditScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+        <TitleComponent title={'비밀번호 변경'}></TitleComponent>
       <Text style={styles.label}>새 비밀번호</Text>
       <TextInput
         style={styles.input}
@@ -71,7 +72,9 @@ const PasswordEditScreen: React.FC<Props> = ({ navigation }) => {
         secureTextEntry // 비밀번호 입력시 보안 처리
       />
 
-      <Button title="전송" onPress={handleSubmit} />
+        <Pressable style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>전송</Text>
+          </Pressable>
     </View>
   );
 };
@@ -96,6 +99,20 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16,
     backgroundColor: '#F8F8F8',
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0080DC',
+    borderRadius: 10,
+    height: 45,
+    marginBottom: 15,
+    marginTop: 20,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
 

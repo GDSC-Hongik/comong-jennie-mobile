@@ -21,19 +21,63 @@ const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Class" component={MajorSelectScreen} />
-        <Stack.Screen name="MajorSelect" component={MajorSelectScreen} />
-        <Stack.Screen name="MajorGrade" component={MajorGradeScreen} />
-        <Stack.Screen name="MajorSub" component={MajorSubScreen} />
-        <Stack.Screen name="MajorProf" component={MajorProfScreen} />
-        <Stack.Screen name="Major" component={MajorScreen} />
-        <Stack.Screen name="MajorPost" component={MajorPostScreen} />
-
+        <Stack.Screen 
+          name="Home" 
+          component={HomeScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="Class" 
+          component={MajorSelectScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="MajorSelect" 
+          component={MajorSelectScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="MajorGrade" 
+          component={MajorGradeScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="MajorSub" 
+          component={MajorSubScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="MajorProf" 
+          component={MajorProfScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="Major" 
+          component={MajorScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="MajorPost" 
+          component={MajorPostScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        
         {/* 구인게시판 관련 스크린 추가 */}
-        <Stack.Screen name="RecruitSelect" component={RecruitSelectScreen} />
-        <Stack.Screen name="Recruit" component={RecruitScreen} />
-        <Stack.Screen name="RecruitPost" component={RecruitPostScreen} />
+        <Stack.Screen 
+          name="RecruitSelect" 
+          component={RecruitSelectScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="Recruit" 
+          component={RecruitScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="RecruitPost" 
+          component={RecruitPostScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

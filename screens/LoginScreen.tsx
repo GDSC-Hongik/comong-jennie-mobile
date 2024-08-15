@@ -1,3 +1,5 @@
+// 로그인 화면
+
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, Pressable, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,21 +39,21 @@ const LogInScreen: React.FC<Props> = ({ navigation }) => {
       }
 
       const responseData = await response.json();
-      for (const key in responseData) {
-        if (responseData.hasOwnProperty(key)) {
-          console.log(`${key}: ${responseData[key]}`);
-        }
-      }
+      // for (const key in responseData) {
+      //   if (responseData.hasOwnProperty(key)) {
+      //     console.log(`${key}: ${responseData[key]}`);
+      //   }
+      // }
       console.log(responseData);
-      const { token } = responseData.user.token;
+      const token = responseData.user.user.token;
       //const { token } = responseData.user;
-      console.log('token: ', token);
+      console.log(token);
 
       
       // const { accessToken, refreshToken } = responseData;
 
       // 토큰을 AsyncStorage에 저장
-      await AsyncStorage.setItem('accessToken', token);
+      await AsyncStorage.setItem('token', token);
       // await AsyncStorage.setItem('refreshToken', refreshToken);
 
       Alert.alert('Success', '로그인에 성공하였습니다!');

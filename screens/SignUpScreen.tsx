@@ -72,7 +72,7 @@ const SignUpScreen: React.FC<Props> = ({ navigation }) => {
       }
 
       const loginResponseData = await loginResponse.json();
-      const { token } = loginResponseData.user;
+      const token = loginResponseData.user.user.token;
       // const { accessToken, refreshToken } = loginResponseData;
 
       // 토큰을 AsyncStorage에 저장

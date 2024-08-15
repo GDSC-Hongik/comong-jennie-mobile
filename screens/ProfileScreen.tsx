@@ -16,30 +16,31 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const [newNickname, setNewNickname] = useState('');
   const [isEditingNickname, setIsEditingNickname] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchProfile = async () => {
-  //     const token = await AsyncStorage.getItem('token');
-  //     if (token) {
-  //       const response = await fetch('https://comong-jennie-server.onrender.com/users/profile', {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `token ${token}`,
-  //         },
-  //       });
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const response = await fetch('https://comong-jennie-server.onrender.com/users/current/', {
+          method: 'GET',
+          headers: {
+            'Authorization': `token ${token}`,
+          },
+        });
 
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         setNickname(data.nickname);
-  //       } else {
-  //         Alert.alert('Error', '프로필 정보를 가져오는데 실패했습니다.');
-  //       }
-  //     } else {
-  //       navigation.replace('LogIn');
-  //     }
-  //   };
+        if (response.ok) {
+          const data = await response.json();
+          setNickname(data.username);
+        } else {
+          Alert.alert('Error', '프로필 정보를 가져오는데 실패했습니다.');
+        }
+      } else {
+        Alert.alert('Notice', '로그인이 필요한 서비스입니다.');
+        navigation.replace('LogIn');
+      }
+    };
 
-  //   fetchProfile();
-  // }, []);
+    fetchProfile();
+  }, []);
 
   const handleNicknameEdit = () => {
     setIsEditingNickname(true);
@@ -86,7 +87,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem('accessToken');
+    await AsyncStorage.removeItem('token');
     navigation.replace('LogIn');
   };
 
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DC3545',
     borderRadius: 10,
     height: 40,
-    marginBottom: 15,
+    margin: 15,
   },
   logoutButtonText: {
     color: '#FFFFFF',

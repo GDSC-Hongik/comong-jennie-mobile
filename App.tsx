@@ -15,6 +15,7 @@ import ResumeScreen from './screens/ResumeScreen';
 import ResumeEditScreen  from './screens/ResumeEditScreen';
 import LikePostScreen from './screens/LikePostScreen';
 import ScrapPostScreen from './screens/ScrapPostScreen';
+import PasswordEditScreen from './screens/PasswordEditScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -40,6 +41,7 @@ const App: React.FC = () => {
         <Stack.Screen name="ResumeEdit" component={ResumeEditScreen} />
         <Stack.Screen name="LikePost" component={LikePostScreen} />
         <Stack.Screen name="ScrapPost" component={ScrapPostScreen} />
+        <Stack.Screen name="PasswordEdit" component={PasswordEditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

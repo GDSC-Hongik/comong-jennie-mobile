@@ -15,6 +15,7 @@ export type RootStackParamList = {
   LikePost: undefined;
   ScrapPost: undefined;
   PasswordEdit: undefined;
+  Detail: { };
 };
 
 // 네비게이션 속성 정의
@@ -29,4 +30,5 @@ export type LoadingScreenNavigationProp = NativeStackNavigationProp<RootStackPar
 export type LikePostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LikePost'>;
 export type ScrapPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'ScrapPost'>;
 export type PasswordEditScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'PasswordEdit'>;
+export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DetailScreen'>;
 

@@ -1,76 +1,91 @@
-//buttonText 센터로 정렬 수정, 박스 컬러 수정
-//회원가입 성공하면 로그인 화면으로 이동하게 수정
-
-//SignUpScreen.tsx 회원가입 화면
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SignUpScreenNavigationProp } from '../types/navigation';
 
-const SignUpScreen: React.FC = () => {
+interface Props {
+  navigation: SignUpScreenNavigationProp;
+}
+
+const SignUpScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [sentVerificationCode, setSentVerificationCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [username, setUsername] = useState('');
 
-  const sendVerificationCode = () => {
-    if (email) {
-      // 임의의 인증번호 생성 및 전송 로직 (실제 사용 시 이메일 전송 API 필요)
-      const generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-      setSentVerificationCode(generatedCode);
-      Alert.alert('Verification code sent!', `Your code: ${generatedCode}`);
-      console.log('임시 인증 코드:', generatedCode);
-    } else {
-      Alert.alert('Error', 'Please enter a valid email address.');
-    }
-  };
-
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email || !password || !confirmPassword || !username) {
-      Alert.alert('Error', 'Please fill out all fields.');
+      Alert.alert('Error', '모든 항목을 입력해주세요.');
       return;
     }
     if (password !== confirmPassword) {
       Alert.alert('Error', '비밀번호가 일치하지 않습니다');
       return;
     }
-    if (verificationCode !== sentVerificationCode) {
-      Alert.alert('Error', '인증코드가 일치하지 않습니다');
-      return;
-    }
 
     const url = 'https://comong-jennie-server.onrender.com/users/register/';
     const data = {
-      username: username, 
+      username: username,
       email: email,
       password: password,
     };
 
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then(response => {
-        if (!response.ok) {
-          return response.json().then(errorData => {
-            Alert.alert('Error', `Failed to sign up: ${response.statusText}`);
-            console.error('Error details:', errorData);
-            throw new Error('Network response was not ok');
-          });
-        }
-        return response.json();
-      })
-      .then(responseData => {
-        Alert.alert('Success', 'You have signed up successfully!');
-        console.log('Response Data:', responseData);
-      })
-      .catch(error => {
-        console.error('There was a problem with your fetch operation:', error);
-        Alert.alert('Error', 'There was a problem with your request.');
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        Alert.alert('Error', `회원가입에 실패했습니다: ${response.statusText}`);
+        console.error('Error details:', errorData);
+        return;
+      }
+
+      const responseData = await response.json();
+      Alert.alert('Success', '회원가입에 성공했습니다!');
+
+      // 자동 로그인 처리
+      const loginUrl = 'https://comong-jennie-server.onrender.com/users/login/';
+      const loginData = {
+        email: email,
+        password: password,
+      };
+
+      const loginResponse = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (!loginResponse.ok) {
+        const errorData = await loginResponse.json();
+        Alert.alert('Error', `자동 로그인에 실패했습니다: ${loginResponse.statusText}`);
+        console.error('Error details:', errorData);
+        return;
+      }
+
+      const loginResponseData = await loginResponse.json();
+      const { token } = loginResponseData.user;
+      // const { accessToken, refreshToken } = loginResponseData;
+
+      // 토큰을 AsyncStorage에 저장
+      await AsyncStorage.setItem('accessToken', token);
+      // await AsyncStorage.setItem('refreshToken', refreshToken);
+
+      // 홈 화면으로 이동
+      navigation.navigate('Home');
+
+    } catch (error) {
+      console.error('fetch 작업에 오류가 발생했습니다:', error);
+      Alert.alert('Error', '요청에 오류가 발생했습니다');
+    }
   };
 
   return (
@@ -81,20 +96,7 @@ const SignUpScreen: React.FC = () => {
         placeholder="이메일을 입력하세요"
         value={email}
         onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      
-      <TouchableOpacity style={styles.button} onPress={sendVerificationCode}>
-        <Text style={styles.buttonText}>인증코드 전송</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.label}>인증코드</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="인증코드를 입력하세요"
-        value={verificationCode}
-        onChangeText={setVerificationCode}
-        keyboardType="numeric"
+        inputMode="email"
       />
 
       <Text style={styles.label}>비밀번호</Text>
@@ -126,7 +128,7 @@ const SignUpScreen: React.FC = () => {
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>회원가입</Text>
       </TouchableOpacity>
-      
+
     </View>
   );
 };
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 10,
     color: '#555555',
   },
   input: {
@@ -155,14 +157,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#0080DC',
     borderRadius: 10,
-    height: 40,
+    height: 45,
     marginBottom: 15,
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontWeight: 600,
     fontSize: 14,
-
   },
 });
 

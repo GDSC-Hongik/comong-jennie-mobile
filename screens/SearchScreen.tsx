@@ -10,7 +10,7 @@ interface Post {
   content: string;
 }
 
-const SearchScreen: React.FC = () => {
+const SearchScreen: React.FC = ({ }) => {
   const [kind, setKind] = useState('');
   const [results, setResults] = useState<Post[]>([]);
   
@@ -18,7 +18,7 @@ const SearchScreen: React.FC = () => {
   const { serverUrl } = route.params as { serverUrl: string }; // 전달받은 서버 주소
 
   const handleSearch = () => {
-    const url = `${serverUrl}/search=${encodeURIComponent(kind)}`;
+    const url = `${serverUrl}/?search=${encodeURIComponent(kind)}`;
     
     fetch(url, {
       method: 'GET',

@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types/navigation';  // 이 줄을 추가하세요
+import { RootStackParamList } from '../types/navigation';
 
 type MajorProfScreenRouteProp = RouteProp<RootStackParamList, 'MajorProf'>;
 type MajorProfScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MajorProf'>;
@@ -15,23 +15,31 @@ const MajorProfScreen: React.FC = () => {
 
   const [posts, setPosts] = useState<any[]>([]);
 
-  useEffect(() => {
-    const fetchProfessorPosts = async () => {
-      try {
-        const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/${subject}/${professor}/`);
-
-        if (response.status === 200 && Array.isArray(response.data)) {
-          setPosts(response.data);
-        } else {
-          console.error('Unexpected response format');
-        }
-      } catch (error) {
-        console.error('Failed to fetch professor posts', error);
+  const fetchProfessorPosts = async () => {
+    try {
+      const response = await axios.get(`https://comong-jennie-server.onrender.com/main/major/${grade}/${subject}/${professor}/`);
+      if (response.status === 200 && Array.isArray(response.data)) {
+        setPosts(response.data);
+      } else {
+        console.error('Unexpected response format');
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch professor posts', error);
+    }
+  };
 
+  useEffect(() => {
     fetchProfessorPosts();
   }, [grade, subject, professor]);
+
+  // 화면이 다시 포커스될 때마다 데이터를 다시 가져옴
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchProfessorPosts();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handlePostPress = (postId: number) => {
     navigation.navigate('Major', { grade, sub: subject, profs: professor, postId });

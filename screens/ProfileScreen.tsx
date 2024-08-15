@@ -15,30 +15,30 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const [newNickname, setNewNickname] = useState('');
   const [isEditingNickname, setIsEditingNickname] = useState(false);
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        const response = await fetch('https://comong-jennie-server.onrender.com/users/profile', {
-          method: 'GET',
-          headers: {
-            'Authorization': `token ${token}`,
-          },
-        });
+  // useEffect(() => {
+  //   const fetchProfile = async () => {
+  //     const token = await AsyncStorage.getItem('token');
+  //     if (token) {
+  //       const response = await fetch('https://comong-jennie-server.onrender.com/users/profile', {
+  //         method: 'GET',
+  //         headers: {
+  //           'Authorization': `token ${token}`,
+  //         },
+  //       });
 
-        if (response.ok) {
-          const data = await response.json();
-          setNickname(data.nickname);
-        } else {
-          Alert.alert('Error', '프로필 정보를 가져오는데 실패했습니다.');
-        }
-      } else {
-        navigation.replace('LogIn');
-      }
-    };
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         setNickname(data.nickname);
+  //       } else {
+  //         Alert.alert('Error', '프로필 정보를 가져오는데 실패했습니다.');
+  //       }
+  //     } else {
+  //       navigation.replace('LogIn');
+  //     }
+  //   };
 
-    fetchProfile();
-  }, []);
+  //   fetchProfile();
+  // }, []);
 
   const handleNicknameEdit = () => {
     setIsEditingNickname(true);
@@ -158,9 +158,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '600',
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 20,
+    color: "#050360",
   },
+
   section: {
     marginBottom: 20,
   },
@@ -205,6 +207,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   logoutButton: {
+    marginTop: 100,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#DC3545',

@@ -15,6 +15,12 @@ export type RootStackParamList = {
   LikePost: undefined;
   ScrapPost: undefined;
   PasswordEdit: undefined;
+  MajorSelect: undefined;
+  MajorGrade: { grade: number };
+  MajorSub: { grade: number; subject: string };
+  MajorProf: { grade: number; subject: string; professor: string };
+  MajorPost: { grade: number; sub: string; profs: string; postId?: number };
+  Major: { grade: number; sub: string; profs: string; postId: number };
   Detail: { };
 };
 
@@ -31,4 +37,6 @@ export type LikePostScreenNavigationProp = NativeStackNavigationProp<RootStackPa
 export type ScrapPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'ScrapPost'>;
 export type PasswordEditScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'PasswordEdit'>;
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DetailScreen'>;
+export type ResumeScreenNavigationProp =  NativeStackNavigationProp<RootStackParamList, 'Resume'>;
+export type ResumeEditScreenNavigationProp =  NativeStackNavigationProp<RootStackParamList, 'ResumeEdit'>;
 

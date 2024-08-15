@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { HomeScreenNavigationProp } from '../types/navigation';
 import ProfileIcon from '../src/components/UserIcon';
 import ComongIcon from '../src/components/ComongIcon';
@@ -81,6 +81,7 @@ const parseScrapBoard = (scrap_board: string): { subjectCode: string; professorC
 interface Scrap {
   id: number;
   scrap_board: string;
+  title: string; // 게시물 제목
 }
 
 interface Props {
@@ -100,11 +101,17 @@ const fetchBoardData = async (): Promise<Scrap[]> => {
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [boards, setBoards] = useState<Scrap[]>([]);
+  const [latestPosts, setLatestPosts] = useState<Scrap[]>([]); // 최신 게시물 저장할 상태
 
   useEffect(() => {
     const loadData = async () => {
       const data = await fetchBoardData();
       setBoards(data);
+      
+      // 최신 게시물 두 개 추출
+      const sortedBoards = [...data].sort((a, b) => b.id - a.id);
+      const latest = sortedBoards.slice(0, 2);
+      setLatestPosts(latest);
     };
 
     loadData();
@@ -112,6 +119,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const renderBoard = ({ item }: { item: Scrap }) => {
     const parsedData = parseScrapBoard(item.scrap_board);
+    const latestPost = latestPosts.find(post => parseScrapBoard(post.scrap_board)?.subjectCode === parsedData?.subjectCode);
 
     return (
       <TouchableOpacity
@@ -126,10 +134,18 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         }}
       >
         {parsedData ? (
-          <Text style={styles.boardTitle}>
-            {Object.keys(subMap).find(key => subMap[key] === parsedData.subjectCode)} 
-            ({Object.keys(profMap).find(key => profMap[key] === parsedData.professorCode)})
-          </Text>
+          <>
+            <Text style={styles.boardTitle}>
+              {Object.keys(subMap).find(key => subMap[key] === parsedData.subjectCode)} 
+              ({Object.keys(profMap).find(key => profMap[key] === parsedData.professorCode)})
+            </Text>
+            {/* 최신 게시물 제목 표시 */}
+            {latestPost && (
+              <Text style={styles.postTitle}>
+                {latestPost.title}
+              </Text>
+            )}
+          </>
         ) : (
           <Text style={styles.boardTitle}>정보 없음</Text>
         )}
@@ -140,30 +156,23 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.topbar}>
-        {/* <ComongIcon></ComongIcon> */}
-        <Text style={styles.text}>커몽</Text>
         
-        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-          <Text>Sign Up</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('LogIn')}>
-          <Text>Log In</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity onPress={() => navigation.navigate('Search', { serverUrl: 'https://comong-jennie-server.onrender.com/main/' })}>
-          <SearchIcon></SearchIcon>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
-          <NotificationIcon></NotificationIcon>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <ProfileIcon></ProfileIcon>
-        </TouchableOpacity>
-
-
+        <View style={styles.topbarLeft}>
+          <Text style={styles.text}>커몽</Text>
         </View>
-
-      
+        
+        <View style={styles.topbarRight}>
+          <TouchableOpacity onPress={() => navigation.navigate('Search', { serverUrl: 'https://comong-jennie-server.onrender.com/main/' })}>
+            <SearchIcon width={40} height={40}></SearchIcon>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
+            <NotificationIcon></NotificationIcon>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <ProfileIcon></ProfileIcon>
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <View style={styles.marginSetBox}>
         <View>
@@ -180,14 +189,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         />
 
         <View>
-          {/* 여기는 전체 게시판 스크린으로 이동하게 수정 */}
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <Text style={styles.moreText}>
               전체 게시판 보기
             </Text>
           </TouchableOpacity>
         </View>
-
 
         <View>
           <Text style={styles.midTitle}>
@@ -196,10 +203,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
       </View>
-
-      
-
-    {/* 구인 게시판 최신 글 볼 수 있는 기능 구현 */}
 
     </View>
   );
@@ -216,13 +219,27 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   topbar: {
-    // marginLeft: 20,
-    // marginRight: 20,
     marginTop: 40,
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',          // 세로 중앙 정렬
+    marginBottom: 50,     
+  },
+  topbarLeft: {
+    justifyContent: 'flex-start',
+  },
+  topbarRight: {
+    flexDirection: 'row',          // 아이콘들을 가로로 배치
+    justifyContent: 'flex-end',    // 오른쪽에 정렬
+    alignItems: 'center', 
   },
   text: {
-    fontSize: 20,
+    fontSize: 25,
+    paddingTop: 10,
+    paddingBottom: 10,
+    textAlign: 'left',
+    color: '#050360',
+    fontWeight: 'bold',
   },
   boardBox: {
     backgroundColor: '#F0F0F0',
@@ -230,7 +247,6 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10,
     borderRadius: 10,
-    // Align items center to ensure the box is not stretched
     alignItems: 'center',
   },
   boardTitle: {
@@ -240,6 +256,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#050360',
   },
+  postTitle: {
+    fontSize: 14,
+    color: '#050360',
+    textAlign: 'center',
+  },
   moreText: {
     fontSize: 14,
     paddingTop: 10,
@@ -248,10 +269,7 @@ const styles = StyleSheet.create({
     color: '#050360',
     fontWeight: 'bold',
   },
-  marginSetBox: {
-    // marginLeft: 15,
-    // marginRight: 15,
-  },
+  marginSetBox: {},
   midTitle: {
     fontSize: 20,
     paddingTop: 10,

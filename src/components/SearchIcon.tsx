@@ -1,7 +1,13 @@
 import React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-const SearchIcon = () => {
+interface SearchIconProps {
+    width: number;
+    height: number;
+}
+
+
+const SearchIcon: React.FC<SearchIconProps> = ({ width, height }) => {
     return (
         <Svg width="20" height="20" viewBox="0 0 20 20" fill="none">
             <Path 

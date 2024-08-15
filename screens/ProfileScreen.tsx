@@ -3,6 +3,7 @@ import { View, Text, Alert, StyleSheet, TouchableOpacity, Pressable, TextInput }
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { RootStackParamList } from '../types/navigation';
+import TitleComponent from '../src/components/TitleComponent';
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
 
@@ -103,7 +104,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>프로필</Text>
+      <TitleComponent title={'프로필'} >
+      </TitleComponent>
       
       {/* <View style={styles.section}>
         <Text style={styles.label}>닉네임</Text>
@@ -152,8 +154,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    //padding: 15,
     backgroundColor: '#fff',
+    marginTop: 40,
   },
   title: {
     fontSize: 24,
@@ -179,6 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   profileButton: {
+    margin: 15,
     justifyContent: 'center',
     alignItems: 'flex-start',
     backgroundColor: '#F0F0F0',

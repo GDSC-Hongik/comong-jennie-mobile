@@ -7,6 +7,7 @@ import { View, Text, StyleSheet, Alert, Pressable, ScrollView, TouchableOpacity 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList, ResumeScreenNavigationProp } from '../types/navigation';
 import ResumeBox from '../src/components/ResumeBox';
+import TitleComponent from '../src/components/TitleComponent';
 
 interface Props {
   navigation: ResumeScreenNavigationProp;
@@ -15,7 +16,10 @@ interface Props {
 const ResumeScreen: React.FC<Props> = ({ navigation }) => {
   
     return (
+        
         <ScrollView contentContainerStyle={styles.container}>
+            <TitleComponent title={'내 이력서'} >
+            </TitleComponent>
             <ResumeBox 
                 resumeName={'프론트 이력서'}
                 projectExperience={'3회'}
@@ -50,6 +54,14 @@ const ResumeScreen: React.FC<Props> = ({ navigation }) => {
     container: {
         marginTop: 40,
         marginBottom: 40,
+    },
+    title: {
+        fontSize: 25,
+        paddingTop: 10,
+        paddingBottom: 10,
+        textAlign: 'left',
+        color: '#050360',
+        fontWeight: 'bold',
     },
     editButton: {
         alignItems: 'center',

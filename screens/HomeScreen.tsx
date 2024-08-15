@@ -119,6 +119,32 @@ const fetchLatestPosts = async (): Promise<Post[]> => {
   }
 };
 
+// const fetchLatestPosts = async (): Promise<Post[]> => {
+//   try {
+//     // Fetch the latest post IDs
+//     const response = await fetch('https://comong-jennie-server.onrender.com/main/join/');
+//     const postIds = await response.json();
+    
+//     // Fetch content for each post
+//     const posts = await Promise.all(postIds.slice(0, 6).map(async (postId: number) => {
+//       const contentResponse = await fetch(`https://comong-jennie-server.onrender.com/main/join/${postId}`);
+//       const contentData = await contentResponse.json();
+//       return {
+//         id: postId,
+//         title: contentData.title,
+//         content: contentData.post.content,
+//         current_num: contentData.current_num,
+//         participants_num: contentData.participants_num,
+//       };
+//     }));
+
+//     return posts;
+//   } catch (error) {
+//     console.error(error);
+//     return [];
+//   }
+// };
+
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [boards, setBoards] = useState<Scrap[]>([]);
   const [latestPosts, setLatestPosts] = useState<Scrap[]>([]); // 최신 게시물 저장할 상태
@@ -188,12 +214,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
 
   const renderPost = ({ item }: { item: Post }) => {
     const windowWidth = Dimensions.get('window').width;
-    const boxWidth = windowWidth * 0.4;  // 화면 너비의 60%로 설정
-    const boxHeight = 300;  // 높이는 300으로 설정하여 길쭉하게
+    const boxWidth = windowWidth * 0.4;  // 화면 너비의 40%로 설정
+    const boxHeight = 250; 
 
     return (
       <TouchableOpacity
-        style={[styles.postBox, { width: boxWidth }]}
+        style={[styles.postBox, { width: boxWidth, height: boxHeight }]}
         onPress={() => navigation.navigate('Detail', { postId: item.id })}
       >
         <Text style={styles.postTitle}>{item.title}</Text>

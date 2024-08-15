@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
-import { RootStackParamList } from '../types/navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';  // 이 줄을 추가하세요
 
 type MajorProfScreenRouteProp = RouteProp<RootStackParamList, 'MajorProf'>;
-type MajorScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Major'>;
+type MajorProfScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MajorProf'>;
 
 const MajorProfScreen: React.FC = () => {
   const route = useRoute<MajorProfScreenRouteProp>();
-  const navigation = useNavigation<MajorScreenNavigationProp>(); // useNavigation에 타입 지정
+  const navigation = useNavigation<MajorProfScreenNavigationProp>();
   const { grade, subject, professor } = route.params;
 
   const [posts, setPosts] = useState<any[]>([]);
@@ -37,8 +37,18 @@ const MajorProfScreen: React.FC = () => {
     navigation.navigate('Major', { grade, sub: subject, profs: professor, postId });
   };
 
+  const handleCreatePostPress = () => {
+    navigation.navigate('MajorPost', { grade, sub: subject, profs: professor });
+  };
+
   return (
     <ScrollView>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
+        <Text>{professor} 교수님의 {subject} 수업</Text>
+        <TouchableOpacity onPress={handleCreatePostPress}>
+          <Image source={require('../assets/Pencil.png')} style={{ width: 24, height: 24 }} />
+        </TouchableOpacity>
+      </View>
       <View>
         {posts.length > 0 ? (
           posts.map((post) => (

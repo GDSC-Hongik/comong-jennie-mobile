@@ -1,46 +1,60 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import axios from 'axios';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';
+
+type MajorPostScreenRouteProp = RouteProp<RootStackParamList, 'MajorPost'>;
+type MajorPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MajorPost'>;
 
 const MajorPostScreen: React.FC = () => {
-  const [title, setTitle] = useState('');  // 제목 상태
-  const [content, setContent] = useState('');  // 내용 상태
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { grade, subject, professor } = route.params;  // 경로 파라미터로 grade, subject, professor 가져오기
+  const route = useRoute<MajorPostScreenRouteProp>();
+  const navigation = useNavigation<MajorPostScreenNavigationProp>();
+  const { grade, sub, profs } = route.params;
+
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
 
   const handleSubmit = async () => {
+    const requestData = {
+      title,
+      content,
+      user: 1  // 임시로 user ID를 하드코딩
+    };
+
+    console.log("Sending POST request with data:", requestData);
+
     try {
-      // POST 요청으로 사용자가 입력한 title과 content를 서버로 전송
-      await axios.post(`https://comong-jennie-server.onrender.com/main/major/${grade}/${subject}/${professor}/create/`, {
-        title,
-        content,
-      });
-      Alert.alert('성공', '게시물이 성공적으로 생성되었습니다.');
-      navigation.goBack();  // 글 작성 후 이전 화면으로 이동
-    } catch (error) {
-      console.error('게시물 생성 실패:', error);
-      Alert.alert('실패', '게시물 생성에 실패했습니다.');
+      const response = await axios.post(
+        `https://comong-jennie-server.onrender.com/main/major/${grade}/${sub}/${profs}/create/`,
+        requestData
+      );
+      console.log("POST request successful:", response.data);
+      Alert.alert('성공', '게시글이 성공적으로 작성되었습니다.');
+      navigation.goBack();  // 글 작성 후 이전 화면으로 돌아갑니다.
+    } catch (error: any) {
+      console.error('게시글 작성 실패:', error.response ? error.response.data : error.message);
+      Alert.alert('실패', '게시글 작성에 실패했습니다.');
     }
   };
 
   return (
-    <View style={{ padding: 20 }}>
+    <View style={{ padding: 10 }}>
       <TextInput
-        placeholder="제목을 입력하세요"
         value={title}
         onChangeText={setTitle}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 10 }}
+        placeholder="제목"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
       />
       <TextInput
-        placeholder="내용을 입력하세요"
         value={content}
         onChangeText={setContent}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 10, height: 150 }}
+        placeholder="내용"
+        style={{ borderWidth: 1, marginBottom: 10, padding: 5, height: 150 }}
         multiline
       />
-      <Button title="제출" onPress={handleSubmit} />
+      <Button title="작성하기" onPress={handleSubmit} />
     </View>
   );
 };

@@ -10,7 +10,7 @@ type MajorSelectScreenNavigationProp = StackNavigationProp<
   'MajorSelect'
 >;
 
-const subMap: { [key: string]: string } = {
+export const subMap: { [key: string]: string } = {
   "자료구조및프로그래밍": "DS&P",
   "논리회로설계및실험": "LC&L",
   "인터넷프로그래밍": "IP",
@@ -43,7 +43,7 @@ const subMap: { [key: string]: string } = {
   "임베디드시스템및실험": "ES&L",
 };
 
-const profMap: { [key: string]: string } = {
+export const profMap: { [key: string]: string } = {
  "배성일": "PaeS",
   "송하윤": "SongH",
   "이혜영1": "LeeHY1",

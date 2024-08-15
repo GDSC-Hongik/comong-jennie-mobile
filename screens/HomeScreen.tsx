@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { HomeScreenNavigationProp } from '../types/navigation';
 import ProfileIcon from '../src/components/UserIcon';
 import ComongIcon from '../src/components/ComongIcon';
 import SearchIcon from '../src/components/SearchIcon';
 import NotificationIcon from '../src/components/NotificationIcon';
+import { SearchBar } from 'react-native-screens';
+
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  current_num: number;
+  participants_num: number;
+}
 
 // Define the mapping for subjects and professors
 const subMap: { [key: string]: string } = {
@@ -99,6 +108,17 @@ const fetchBoardData = async (): Promise<Scrap[]> => {
   }
 };
 
+const fetchLatestPosts = async (): Promise<Post[]> => {
+  try {
+    const response = await fetch('https://comong-jennie-server.onrender.com/main/join/');
+    const data = await response.json();
+    return data.slice(0, 6);  // 최신 6개의 포스트만 반환
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const [boards, setBoards] = useState<Scrap[]>([]);
   const [latestPosts, setLatestPosts] = useState<Scrap[]>([]); // 최신 게시물 저장할 상태
@@ -120,6 +140,8 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const renderBoard = ({ item }: { item: Scrap }) => {
     const parsedData = parseScrapBoard(item.scrap_board);
     const latestPost = latestPosts.find(post => parseScrapBoard(post.scrap_board)?.subjectCode === parsedData?.subjectCode);
+
+
 
     return (
       <TouchableOpacity
@@ -153,8 +175,39 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     );
   };
 
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const data = await fetchLatestPosts();
+      setPosts(data);
+    };
+
+    loadPosts();
+  }, []);
+
+  const renderPost = ({ item }: { item: Post }) => {
+    const windowWidth = Dimensions.get('window').width;
+    const boxWidth = windowWidth * 0.4;  // 화면 너비의 60%로 설정
+    const boxHeight = 300;  // 높이는 300으로 설정하여 길쭉하게
+
+    return (
+      <TouchableOpacity
+        style={[styles.postBox, { width: boxWidth }]}
+        onPress={() => navigation.navigate('Detail', { postId: item.id })}
+      >
+        <Text style={styles.postTitle}>{item.title}</Text>
+        <Text style={styles.postContent} numberOfLines={3}>{item.content}</Text>
+        <Text style={styles.postParticipants}>
+          {item.current_num} / {item.participants_num}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
+
       <View style={styles.topbar}>
         
         <View style={styles.topbarLeft}>
@@ -162,14 +215,20 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
         
         <View style={styles.topbarRight}>
-          <TouchableOpacity onPress={() => navigation.navigate('Search', { serverUrl: 'https://comong-jennie-server.onrender.com/main/' })}>
-            <SearchIcon width={40} height={40}></SearchIcon>
+          <TouchableOpacity style= {styles.SearchBar}onPress={() => navigation.navigate('Search', { serverUrl: 'https://comong-jennie-server.onrender.com/main/' })}>
+            <View>
+              <SearchIcon width={40} height={40}></SearchIcon>
+            </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
-            <NotificationIcon></NotificationIcon>
+            <View style={{padding: 10}}>  
+              <NotificationIcon></NotificationIcon>
+              </View>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-            <ProfileIcon></ProfileIcon>
+            <View>
+              <ProfileIcon></ProfileIcon>
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -196,10 +255,21 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
+      <View style={styles.marginSetBox}>
         <View>
           <Text style={styles.midTitle}>
             구인 게시판
           </Text>
+        </View>
+        <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
+          <FlatList<Post>
+           data={posts}
+            renderItem={renderPost}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal  // 수평 스크롤을 위해 설정
+            showsHorizontalScrollIndicator={false}
+          />
+        </ScrollView>
         </View>
 
       </View>
@@ -223,7 +293,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',          // 세로 중앙 정렬
-    marginBottom: 50,     
+    marginBottom: 20,     
   },
   topbarLeft: {
     justifyContent: 'flex-start',
@@ -257,9 +327,10 @@ const styles = StyleSheet.create({
     color: '#050360',
   },
   postTitle: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#050360',
     textAlign: 'center',
+    fontWeight: 'bold',
   },
   moreText: {
     fontSize: 14,
@@ -281,6 +352,48 @@ const styles = StyleSheet.create({
   profileIcon: {
     width: 40,
   },
+  postBox: {
+    backgroundColor: '#F0F0F0',
+    width: 60,
+    height: 200,
+    padding: 10,
+    borderRadius: 10,
+    margin: 4,  // 간격을 조정
+    justifyContent: 'center',
+  },
+  postTitle2: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#050360',
+    textAlign: 'center',
+  },
+  postContent: {
+    fontSize: 14,
+    color: '#333',
+    marginVertical: 5,
+    textAlign: 'center',
+  },
+  postParticipants: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFF',
+    textAlign: 'center',
+    padding: 5,
+    backgroundColor: '#0080DC',
+  },
+  scrollContainer: {
+    flexDirection: 'row',
+    paddingVertical: 8,
+  },
+  SearchBar: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+    paddingLeft: 150,
+    paddingRight: 5,
+    paddingBottom: 5,
+    paddingTop: 5,
+
+  }
 });
 
 export default HomeScreen;

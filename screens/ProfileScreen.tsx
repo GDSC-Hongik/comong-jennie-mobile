@@ -105,7 +105,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>프로필</Text>
       
-      <View style={styles.section}>
+      {/* <View style={styles.section}>
         <Text style={styles.label}>닉네임</Text>
         {isEditingNickname ? (
           <>
@@ -124,10 +124,10 @@ const ProfileScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.profileButtonText}>{nickname || '닉네임을 변경하려면 클릭하세요'}</Text>
           </Pressable>
         )}
-      </View>
+      </View> */}
 
       <Pressable style={styles.profileButton} onPress={handlePasswordChange}>
-        <Text style={styles.profileButtonText}>비밀번호 변경</Text>
+        <Text style={styles.profileButtonText}>개인정보 수정</Text>
       </Pressable>
 
       <Pressable style={styles.profileButton} onPress={goToLikePostScreen}>
@@ -180,13 +180,14 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#F0F0F0',
     borderColor: '#B5B5B5',
     borderWidth: 1,
     borderRadius: 10,
     height: 40,
     marginBottom: 15,
+    paddingLeft: 10,
   },
   profileButtonText: {
     color: '#000',
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
   saveButton: {
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#28A745',
+    backgroundColor: '#0080DC',
     borderRadius: 10,
     height: 40,
     marginBottom: 15,

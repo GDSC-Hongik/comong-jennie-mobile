@@ -20,7 +20,7 @@ const LogInScreen: React.FC<Props> = ({ navigation }) => {
 
     setIsLoading(true);  // 로딩 시작
 
-    
+
     try {
       const response = await fetch('https://comong-jennie-server.onrender.com/users/login/', {
         method: 'POST',
@@ -42,8 +42,8 @@ const LogInScreen: React.FC<Props> = ({ navigation }) => {
           console.log(`${key}: ${responseData[key]}`);
         }
       }
-
-      const { token } = responseData.auth?.token;
+      console.log(responseData);
+      const { token } = responseData.user.token;
       //const { token } = responseData.user;
       console.log('token: ', token);
 

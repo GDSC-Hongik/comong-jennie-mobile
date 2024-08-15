@@ -13,6 +13,8 @@ import SearchScreen from './screens/SearchScreen';
 import NotificationScreen from './screens/NotificationScreen';
 import ResumeScreen from './screens/ResumeScreen';
 import ResumeEditScreen  from './screens/ResumeEditScreen';
+import LikePostScreen from './screens/LikePostScreen';
+import ScrapPostScreen from './screens/ScrapPostScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -36,6 +38,8 @@ const App: React.FC = () => {
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Resume" component={ResumeScreen} />
         <Stack.Screen name="ResumeEdit" component={ResumeEditScreen} />
+        <Stack.Screen name="LikePost" component={LikePostScreen} />
+        <Stack.Screen name="ScrapPost" component={ScrapPostScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

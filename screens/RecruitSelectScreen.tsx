@@ -73,7 +73,15 @@ const RecruitSelectScreen: React.FC<RecruitSelectScreenProps> = ({ navigation })
           <TouchableOpacity onPress={() => goToPostDetail(item.id)} style={styles.postItem}>
             <View style={styles.postHeader}>
               <Text style={styles.postTitle}>{item.title}</Text>
-              <Text style={styles.participants}>{item.current_num} / {item.participants_num}</Text>
+              <Text
+                style={[
+                  styles.participants,
+                  item.participants_num - item.current_num === 1 && { color: 'red' },
+                  item.participants_num - item.current_num === 0 && { color: '#D3D3D3' } // Light gray color
+                ]}
+              >
+                {item.current_num} / {item.participants_num}
+              </Text>
             </View>
           </TouchableOpacity>
         )}

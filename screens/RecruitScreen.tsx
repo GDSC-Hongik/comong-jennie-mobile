@@ -10,7 +10,7 @@ interface RecruitScreenProps {
       postId: number;
     };
   };
-  navigation: NativeStackNavigationProp<RootStackParamList, 'RecruitScreen'>;
+  navigation: NativeStackNavigationProp<RootStackParamList, 'Recruit'>;
 }
 
 const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
@@ -127,7 +127,13 @@ const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
         <>
           <View style={styles.postHeader}>
             <Text style={styles.title}>{post.title}</Text>
-            <Text style={styles.participants}>
+            <Text
+              style={[
+                styles.participants,
+                post.participants_num - post.current_num === 1 && { color: 'red' },
+                post.participants_num - post.current_num === 0 && { color: '#D3D3D3' } // Light gray color
+              ]}
+            >
               {post.current_num} / {post.participants_num}
             </Text>
           </View>

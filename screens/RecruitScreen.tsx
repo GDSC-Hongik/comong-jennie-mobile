@@ -143,7 +143,6 @@ const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* 최상단 중앙에 "구인게시판" 텍스트 추가 */}
       <Text style={styles.header}>구인게시판</Text>
       {post ? (
         <>
@@ -162,7 +161,6 @@ const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
           </View>
           <Text style={styles.content}>{post.content}</Text>
 
-          {/* 버튼을 post 하단에 배치 */}
           <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.deleteButton} onPress={deletePost}>
               <Text style={styles.deleteButtonText}>게시물 삭제</Text>
@@ -180,7 +178,6 @@ const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
             </TouchableOpacity>
           </View>
 
-          {/* 구분선 추가 */}
           <View style={styles.sectionDivider} />
 
           {comments.length > 0 ? (
@@ -202,7 +199,7 @@ const RecruitScreen: React.FC<RecruitScreenProps> = ({ route, navigation }) => {
                 </View>
                 {openCommentIds.includes(comment.id) && resumes[comment.resume_id] && (
                   <View style={styles.resumeContainer}>
-                    <Text style={styles.resumeTitle}>이력 세부사항</Text>
+                    <Text style={styles.resumeTitle}>이력</Text>
                     <Text>Project: {resumes[comment.resume_id]?.[0]?.project || 'N/A'}</Text>
                     <Text>Contest: {resumes[comment.resume_id]?.[0]?.contest || 'N/A'}</Text>
                     <Text>Etc: {resumes[comment.resume_id]?.[0]?.etc || 'N/A'}</Text>
@@ -230,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 40, // 최상단 40px 여백
     paddingHorizontal: 10, // 좌우 10px 여백
-    paddingBottom: 33, // 하단 33px 여백
+    paddingBottom: 43, // 하단 43px 여백
     justifyContent: 'flex-start', // 모든 내용을 위로 정렬
     backgroundColor: '#FFF', // 전체 배경색 설정
   },

@@ -244,6 +244,54 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     );
   };
 
+  interface Post2 {
+    id: number;
+    title: string;
+    content: string;
+    current_num: number;
+    participants_num: number;
+  }
+
+
+
+  const fetchLatestPosts2 = async (): Promise<Post2[]> => {
+    try {
+      const response = await fetch('https://comong-jennie-server.onrender.com/main/');
+      const data = await response.json();
+      return data.notice.slice(0, 10);  // 최신 6개의 포스트만 반환
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const [posts2, setPosts2] = useState<Post2[]>([]);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      const data = await fetchLatestPosts2();
+      setPosts2(data);
+    };
+
+    loadPosts();
+  }, []);
+
+  const renderPost2 = ({ item }: { item: Post2 }) => {
+    const windowWidth = Dimensions.get('window').width;
+    const boxWidth = windowWidth * 0.9;  // 화면 너비의 40%로 설정
+    const boxHeight = 70; 
+
+    return (
+      <TouchableOpacity
+        style={[styles.postBox, { width: boxWidth, height: boxHeight }]}
+        onPress={() => navigation.navigate('Recruit', { postId: item.id })}
+      >
+        <Text style={styles.postTitle}>{item.title}</Text>
+        <Text style={styles.postContent} numberOfLines={3}>{item.content}</Text>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
 
@@ -294,6 +342,12 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
+        <TouchableOpacity onPress={() => navigation.navigate('Notice')}>
+          <Text style={styles.midTitle}>
+            학과 공지사항 보러 가기
+          </Text >
+        </TouchableOpacity>
+
       <View style={styles.marginSetBox}>
         <TouchableOpacity onPress={goToRecruitSelectScreen}>
           <Text style={styles.midTitle}>
@@ -310,6 +364,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           />
         </ScrollView>
         </View>
+
 
       </View>
 
@@ -433,7 +488,25 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingTop: 5,
 
-  }
+  },
+  addBox: {
+    flexDirection: 'row',
+    marginBottom: 80,
+},
+addButton: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    padding: 20,
+    margin: 15,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    borderColor: '#000000',
+    borderWidth: 1,
+},
+addText: {
+    color: '#050360',
+    fontWeight: 'bold',
+}
 });
 
 export default HomeScreen;

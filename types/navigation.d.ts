@@ -24,6 +24,7 @@ export type RootStackParamList = {
   RecruitSelect: undefined;
   RecruitPost: undefined; // RecruitPost 화면 추가
   Recruit: { postId: number }; // Recruit 화면 추가, postId는 필수
+  Notice: undefined;
 };
 
 // 네비게이션 속성 정의 (필요에 따라 추가)
@@ -34,8 +35,6 @@ export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackPar
 export type RecruitSelectScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'RecruitSelect'>;
 export type RecruitPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'RecruitPost'>;
 export type RecruitScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Recruit'>;
-  Detail: { };
-};
 
 // 네비게이션 속성 정의
 export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -43,6 +42,7 @@ export type ClassScreenNavigationProp = NativeStackNavigationProp<RootStackParam
 export type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'SignUp'>;
 export type LogInScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'LogIn'>;
 export type NotificationScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Notification'>;
+export type NoticeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Notice'>;
 export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
 export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
 export type LoadingScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Loading'>;

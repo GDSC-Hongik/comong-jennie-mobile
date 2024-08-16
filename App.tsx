@@ -27,6 +27,7 @@ import PasswordEditScreen from './screens/PasswordEditScreen';
 import RecruitSelectScreen from './screens/RecruitSelectScreen';
 import RecruitScreen from './screens/RecruitScreen';
 import RecruitPostScreen from './screens/RecruitPostScreen';
+import NoticeScreen from './screens/NoticeScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -99,6 +100,11 @@ const App: React.FC = () => {
         <Stack.Screen 
           name="RecruitPost" 
           component={RecruitPostScreen} 
+          options={{ headerShown: false }} // 헤더 숨기기
+        />
+        <Stack.Screen 
+          name="Notice" 
+          component={NoticeScreen} 
           options={{ headerShown: false }} // 헤더 숨기기
         />
       </Stack.Navigator>

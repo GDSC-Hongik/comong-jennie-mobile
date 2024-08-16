@@ -43,17 +43,17 @@ const App: React.FC = () => {
     <NavigationContainer theme={navTheme}>
       <Stack.Navigator initialRouteName="Home">
 
-        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="LogIn" component={LogInScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="Notification" component={NotificationScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="Resume" component={ResumeScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="ResumeEdit" component={ResumeEditScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="LikePost" component={LikePostScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="ScrapPost" component={ScrapPostScreen} options={{ headerShown: false }/>
-        <Stack.Screen name="PasswordEdit" component={PasswordEditScreen} options={{ headerShown: false }/>
+        <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="LogIn" component={LogInScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Notification" component={NotificationScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Search" component={SearchScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Resume" component={ResumeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ResumeEdit" component={ResumeEditScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="LikePost" component={LikePostScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ScrapPost" component={ScrapPostScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="PasswordEdit" component={PasswordEditScreen} options={{ headerShown: false }}/>
         <Stack.Screen 
           name="MajorSelect" 
           component={MajorSelectScreen} 

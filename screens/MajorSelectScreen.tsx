@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -169,7 +169,8 @@ const MajorSelectScreen: React.FC = () => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+    <View >
       {[2, 3, 4].map((grade) => (
         <View key={grade}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -205,7 +206,18 @@ const MajorSelectScreen: React.FC = () => {
         </View>
       ))}
     </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: 15,
+    marginTop: 40,
+  },
+});
 
 export default MajorSelectScreen;

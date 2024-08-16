@@ -158,7 +158,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
   // 구인 게시판 화면으로 이동
   const goToRecruitSelectScreen = () => {
     navigation.navigate('RecruitSelect');
-
+  };
   const [boards, setBoards] = useState<Scrap[]>([]);
   const [latestPosts, setLatestPosts] = useState<Scrap[]>([]); // 최신 게시물 저장할 상태
 
@@ -187,10 +187,10 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         style={styles.boardBox}
         onPress={() => {
           if (parsedData) {
-            navigation.navigate('Detail', {
-              subjectCode: parsedData.subjectCode,
-              professorCode: parsedData.professorCode
-            });
+            // navigation.navigate('Recruit', {
+            //   subjectCode: parsedData.subjectCode,
+            //   professorCode: parsedData.professorCode,
+            // });
           }
         }}
       >
@@ -233,7 +233,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     return (
       <TouchableOpacity
         style={[styles.postBox, { width: boxWidth, height: boxHeight }]}
-        onPress={() => navigation.navigate('Detail', { postId: item.id })}
+        onPress={() => navigation.navigate('Recruit', { postId: item.id })}
       >
         <Text style={styles.postTitle}>{item.title}</Text>
         <Text style={styles.postContent} numberOfLines={3}>{item.content}</Text>

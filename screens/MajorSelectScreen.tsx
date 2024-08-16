@@ -77,6 +77,7 @@ const MajorSelectScreen: React.FC = () => {
 
   // 학년, 과목, 교수 상태를 독립적으로 관리하는 객체
   const [openStates, setOpenStates] = useState<{ [key: number]: boolean }>({});
+  const [subjectOpenStates, setSubjectOpenStates] = useState<{ [key: number]: { [subject: string]: boolean } }>({});
   const [subjectsMap, setSubjectsMap] = useState<{ [key: number]: string[] }>({});
   const [professorsMap, setProfessorsMap] = useState<{ [key: number]: { [subject: string]: string[] } }>({});
 
@@ -111,6 +112,14 @@ const MajorSelectScreen: React.FC = () => {
   };
 
   const handleSubjectToggle = async (grade: number, subject: string) => {
+    setSubjectOpenStates((prevState) => ({
+      ...prevState,
+      [grade]: {
+        ...(prevState[grade] || {}),
+        [subject]: !prevState[grade]?.[subject],
+      },
+    }));
+
     const mappedSubject = subMap[subject];
     if (mappedSubject && (!professorsMap[grade] || !professorsMap[grade][mappedSubject])) {
       await fetchProfessorsForSubject(grade, subject);
@@ -190,7 +199,7 @@ const MajorSelectScreen: React.FC = () => {
                   <Text>{subject} 정보 보기</Text>
                 </TouchableOpacity>
               </View>
-              {professorsMap[grade]?.[subMap[subject]]?.map((professor) => (
+              {subjectOpenStates[grade]?.[subject] && professorsMap[grade]?.[subMap[subject]]?.map((professor) => (
                 <View key={professor} style={{ flexDirection: 'row', alignItems: 'center' }}>
                   <TouchableOpacity>
                     <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />

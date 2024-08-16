@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert, Modal, Button } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Image, Alert, Modal, StyleSheet } from 'react-native';
 import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import axios from 'axios';
 import { RootStackParamList } from '../types/navigation';
 import { profMap } from './MajorSelectScreen';
-import { StyleSheet } from 'react-native';
 
 type MajorScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'MajorSub'>;
 
@@ -49,6 +48,10 @@ const MajorSubScreen: React.FC = () => {
     }
   };
 
+  const handleCancelSelection = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       {/* Header Section */}
@@ -79,8 +82,14 @@ const MajorSubScreen: React.FC = () => {
                     </TouchableOpacity>
                   ))}
                 </ScrollView>
-                <Button title="확인" onPress={handleConfirmSelection} />
-                <Button title="취소" onPress={() => setModalVisible(false)} color="red" />
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmSelection}>
+                    <Text style={styles.buttonText}>확인</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.cancelButton} onPress={handleCancelSelection}>
+                    <Text style={styles.buttonText}>취소</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           </Modal>
@@ -177,6 +186,31 @@ const styles = StyleSheet.create({
   modalItem: {
     marginVertical: 5,
     color: '#050360', // 글자색 설정
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  confirmButton: {
+    backgroundColor: '#050360',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginRight: 5,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#050360',
+    padding: 10,
+    borderRadius: 5,
+    flex: 1,
+    marginLeft: 5,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
   },
   postTitle: {
     fontWeight: 'bold',

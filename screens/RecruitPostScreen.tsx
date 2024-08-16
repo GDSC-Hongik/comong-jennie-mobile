@@ -1,7 +1,5 @@
-// RecruitPostScreen
-
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Alert, Text, Image } from 'react-native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
@@ -44,21 +42,30 @@ const RecruitPostScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Image source={require('../assets/Logo.png')} style={styles.logo} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>구인게시판 글 작성</Text>
+        </View>
+      </View>
       <TextInput
         style={styles.input}
         placeholder="Title"
+        placeholderTextColor="#050360"
         value={title}
         onChangeText={setTitle}
       />
       <TextInput
         style={styles.input}
         placeholder="Content"
+        placeholderTextColor="#050360"
         value={content}
         onChangeText={setContent}
       />
       <TextInput
         style={styles.input}
         placeholder="Participants Number"
+        placeholderTextColor="#050360"
         value={participantsNum}
         onChangeText={setParticipantsNum}
         keyboardType="numeric"
@@ -66,11 +73,12 @@ const RecruitPostScreen: React.FC = () => {
       <TextInput
         style={styles.input}
         placeholder="Current Number"
+        placeholderTextColor="#050360"
         value={currentNum}
         onChangeText={setCurrentNum}
         keyboardType="numeric"
       />
-      <Button title="Submit" onPress={handleSubmit} />
+      <Button title="Submit" onPress={handleSubmit} color="#050360" />
     </View>
   );
 };
@@ -80,12 +88,33 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginTop: 30,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10, // 로고와 텍스트 간격 조정
+  },
+  titleContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#050360',
+  },
   input: {
     height: 40,
-    borderColor: '#ddd',
+    borderColor: '#050360',
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    color: '#050360',
   },
 });
 

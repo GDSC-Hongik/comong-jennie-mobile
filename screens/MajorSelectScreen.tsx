@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../types/navigation';
@@ -44,7 +44,7 @@ export const subMap: { [key: string]: string } = {
 };
 
 export const profMap: { [key: string]: string } = {
- "배성일": "PaeS",
+  "배성일": "PaeS",
   "송하윤": "SongH",
   "이혜영1": "LeeHY1",
   "Leonard Mcmillan": "LeonardM",
@@ -75,20 +75,30 @@ export const profMap: { [key: string]: string } = {
 const MajorSelectScreen: React.FC = () => {
   const navigation = useNavigation<MajorSelectScreenNavigationProp>();
 
-  // 학년, 과목, 교수 상태를 독립적으로 관리하는 객체
   const [openStates, setOpenStates] = useState<{ [key: number]: boolean }>({});
   const [subjectOpenStates, setSubjectOpenStates] = useState<{ [key: number]: { [subject: string]: boolean } }>({});
   const [subjectsMap, setSubjectsMap] = useState<{ [key: number]: string[] }>({});
   const [professorsMap, setProfessorsMap] = useState<{ [key: number]: { [subject: string]: string[] } }>({});
 
   const handleGradeToggle = async (grade: number) => {
-    setOpenStates((prevState) => ({
+    const newOpenState = !openStates[grade];
+    setOpenStates(prevState => ({
       ...prevState,
-      [grade]: !prevState[grade], // 클릭한 학년의 상태만 변경
+      [grade]: newOpenState,
     }));
-
-    if (!openStates[grade] && !subjectsMap[grade]) {
-      await fetchSubjectsForGrade(grade);
+    
+    if (newOpenState) {
+      setSubjectOpenStates(prevState => ({
+        ...prevState,
+        [grade]: Object.keys(prevState[grade] || {}).reduce((acc, subject) => {
+          acc[subject] = false;
+          return acc;
+        }, {} as { [subject: string]: boolean })
+      }));
+      
+      if (!subjectsMap[grade]) {
+        await fetchSubjectsForGrade(grade);
+      }
     }
   };
 
@@ -99,12 +109,12 @@ const MajorSelectScreen: React.FC = () => {
         const subjectKey = Object.keys(subMap).find(key => subMap[key] === item.sub);
         return subjectKey || item.sub;
       })));
-      setSubjectsMap((prevState) => ({
+      setSubjectsMap(prevState => ({
         ...prevState,
         [grade]: uniqueSubjects,
       }));
-    } catch (error: any) {  
-      setSubjectsMap((prevState) => ({
+    } catch (error) {  
+      setSubjectsMap(prevState => ({
         ...prevState,
         [grade]: [],
       }));
@@ -112,7 +122,7 @@ const MajorSelectScreen: React.FC = () => {
   };
 
   const handleSubjectToggle = async (grade: number, subject: string) => {
-    setSubjectOpenStates((prevState) => ({
+    setSubjectOpenStates(prevState => ({
       ...prevState,
       [grade]: {
         ...(prevState[grade] || {}),
@@ -135,15 +145,15 @@ const MajorSelectScreen: React.FC = () => {
           const professorKey = Object.keys(profMap).find(key => profMap[key] === item.profs);
           return professorKey || item.profs;
         })));
-        setProfessorsMap((prevState) => ({
+        setProfessorsMap(prevState => ({
           ...prevState,
           [grade]: {
             ...(prevState[grade] || {}),
             [mappedSubject]: uniqueProfessors,
           },
         }));
-      } catch (error: any) {  
-        setProfessorsMap((prevState) => ({
+      } catch (error) {  
+        setProfessorsMap(prevState => ({
           ...prevState,
           [grade]: {
             ...(prevState[grade] || {}),
@@ -178,43 +188,126 @@ const MajorSelectScreen: React.FC = () => {
   };
 
   return (
-    <View>
-      {[2, 3, 4].map((grade) => (
-        <View key={grade}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => handleGradeToggle(grade)}>
-              <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleGradeClick(grade)}>
-              <Text>{grade}학년 정보 보기</Text>
-            </TouchableOpacity>
-          </View>
-          {openStates[grade] && subjectsMap[grade]?.length > 0 && subjectsMap[grade].map((subject) => (
-            <View key={subject}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => handleSubjectToggle(grade, subject)}>
-                  <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleSubjectClick(grade, subject)}>
-                  <Text>{subject} 정보 보기</Text>
-                </TouchableOpacity>
-              </View>
-              {subjectOpenStates[grade]?.[subject] && professorsMap[grade]?.[subMap[subject]]?.map((professor) => (
-                <View key={professor} style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <TouchableOpacity>
-                    <Image source={require('../assets/folder.png')} style={{ width: 24, height: 24 }} />
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Image source={require('../assets/Logo.png')} style={styles.logo} />
+        <Text style={styles.title}>전공과목 게시판</Text>
+      </View>
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        {[2, 3, 4].map(grade => (
+          <View key={grade} style={styles.gradeContainer}>
+            <View style={styles.gradeHeader}>
+              <TouchableOpacity onPress={() => handleGradeToggle(grade)}>
+                <Image source={require('../assets/folder.png')} style={styles.icon} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleGradeClick(grade)} style={styles.gradeText}>
+                <Text style={styles.text}>{grade}학년</Text>
+              </TouchableOpacity>
+            </View>
+            {openStates[grade] && subjectsMap[grade]?.length > 0 && subjectsMap[grade].map(subject => (
+              <View key={subject} style={styles.subjectContainer}>
+                <View style={styles.subjectHeader}>
+                  <TouchableOpacity onPress={() => handleSubjectToggle(grade, subject)}>
+                    <Image source={require('../assets/folder.png')} style={styles.icon} />
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleProfessorClick(grade, subject, professor)}>
-                    <Text>{professor} 정보 보기</Text>
+                  <TouchableOpacity onPress={() => handleSubjectClick(grade, subject)} style={styles.subjectText}>
+                    <Text style={styles.text}>{subject}</Text>
                   </TouchableOpacity>
                 </View>
-              ))}
-            </View>
-          ))}
-        </View>
-      ))}
+                {subjectOpenStates[grade]?.[subject] && professorsMap[grade]?.[subMap[subject]]?.map(professor => (
+                  <View key={professor} style={styles.professorContainer}>
+                    <TouchableOpacity>
+                      <Image source={require('../assets/folder.png')} style={styles.icon} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleProfessorClick(grade, subject, professor)} style={styles.professorText}>
+                      <Text style={styles.text}>{professor}</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </View>
+            ))}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff', // 전체 배경색 흰색
+  },
+  header: {
+    paddingTop: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff', // 헤더 배경색 흰색
+    paddingHorizontal: 20,
+    zIndex: 1,
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 40,
+    height: 40,
+  },
+  title: {
+    fontSize: 20,
+    color: '#050360',
+    marginLeft: 10,
+    fontWeight: 'bold', // 제목을 볼드체로 설정
+    textAlign: 'center', // 제목을 가운데 정렬
+    flex: 1, // 제목을 가운데 정렬하기 위해 flex 사용
+  },
+  scrollView: {
+    paddingTop: 10,
+    paddingHorizontal: 20,
+    paddingLeft: 27, // 좌측 여백을 27px로 설정
+  },
+  gradeContainer: {
+    marginBottom: 12,
+  },
+  gradeHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
+  gradeText: {
+    marginLeft: 30,
+    backgroundColor: '#fff', // 학년 텍스트 배경색 흰색
+  },
+  subjectContainer: {
+    marginBottom: 12,
+  },
+  subjectHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 2,
+    marginLeft: 30,
+    backgroundColor: '#fff', // 과목 헤더 배경색 흰색
+  },
+  subjectText: {
+    marginLeft: 30,
+    backgroundColor: '#fff', // 과목 텍스트 배경색 흰색
+  },
+  professorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 60,
+    marginBottom: 2,
+    backgroundColor: '#fff', // 교수 컨테이너 배경색 흰색
+  },
+  professorText: {
+    marginLeft: 30,
+    backgroundColor: '#fff', // 교수 텍스트 배경색 흰색
+  },
+  icon: {
+    width: 24,
+    height: 24,
+  },
+  text: {
+    color: '#050360',
+  },
+});
 
 export default MajorSelectScreen;

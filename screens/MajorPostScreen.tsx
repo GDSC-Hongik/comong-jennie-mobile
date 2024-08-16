@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -58,5 +58,15 @@ const MajorPostScreen: React.FC = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: 15,
+    marginTop: 40,
+  },
+});
 
 export default MajorPostScreen;

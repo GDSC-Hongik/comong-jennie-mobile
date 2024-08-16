@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { RouteProp, useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -50,7 +50,7 @@ const MajorProfScreen: React.FC = () => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.container}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', padding: 10 }}>
         <Text>{professor} 교수님의 {subject} 수업</Text>
         <TouchableOpacity onPress={handleCreatePostPress}>
@@ -75,5 +75,15 @@ const MajorProfScreen: React.FC = () => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFFFFF',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: 15,
+    marginTop: 40,
+  },
+});
 
 export default MajorProfScreen;

@@ -1,3 +1,7 @@
+
+
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { HomeScreenNavigationProp } from '../types/navigation';
@@ -146,6 +150,15 @@ const fetchLatestPosts = async (): Promise<Post[]> => {
 // };
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
+  // 전공 선택 화면으로 이동
+  const goToMajorSelectScreen = () => {
+    navigation.navigate('MajorSelect');
+  };
+
+  // 구인 게시판 화면으로 이동
+  const goToRecruitSelectScreen = () => {
+    navigation.navigate('RecruitSelect');
+
   const [boards, setBoards] = useState<Scrap[]>([]);
   const [latestPosts, setLatestPosts] = useState<Scrap[]>([]); // 최신 게시물 저장할 상태
 
@@ -274,7 +287,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         />
 
         <View>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <TouchableOpacity onPress={goToMajorSelectScreen}>
             <Text style={styles.moreText}>
               전체 게시판 보기
             </Text>
@@ -282,11 +295,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         </View>
 
       <View style={styles.marginSetBox}>
-        <View>
+        <TouchableOpacity onPress={goToRecruitSelectScreen}>
           <Text style={styles.midTitle}>
             구인 게시판
-          </Text>
-        </View>
+          </Text >
+        </TouchableOpacity>
         <ScrollView horizontal contentContainerStyle={styles.scrollContainer}>
           <FlatList<Post>
            data={posts}
@@ -369,8 +382,9 @@ const styles = StyleSheet.create({
   marginSetBox: {},
   midTitle: {
     fontSize: 20,
+    marginBottom: 20,
     paddingTop: 10,
-    paddingBottom: 10,
+    //paddingBottom: 10,
     textAlign: 'left',
     color: '#050360',
     fontWeight: 'bold',

@@ -21,6 +21,19 @@ export type RootStackParamList = {
   MajorProf: { grade: number; subject: string; professor: string };
   MajorPost: { grade: number; sub: string; profs: string; postId?: number };
   Major: { grade: number; sub: string; profs: string; postId: number };
+  RecruitSelect: undefined;
+  RecruitPost: undefined; // RecruitPost 화면 추가
+  Recruit: { postId: number }; // Recruit 화면 추가, postId는 필수
+};
+
+// 네비게이션 속성 정의 (필요에 따라 추가)
+export type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+export type ClassScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Class'>;
+export type SearchScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Search'>;
+export type ProfileScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Profile'>;
+export type RecruitSelectScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'RecruitSelect'>;
+export type RecruitPostScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'RecruitPost'>;
+export type RecruitScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Recruit'>;
   Detail: { };
 };
 
@@ -39,4 +52,3 @@ export type PasswordEditScreenNavigationProp = NativeStackNavigationProp<RootSta
 export type DetailScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'DetailScreen'>;
 export type ResumeScreenNavigationProp =  NativeStackNavigationProp<RootStackParamList, 'Resume'>;
 export type ResumeEditScreenNavigationProp =  NativeStackNavigationProp<RootStackParamList, 'ResumeEdit'>;
-
